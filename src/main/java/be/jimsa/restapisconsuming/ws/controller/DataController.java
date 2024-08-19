@@ -2,6 +2,7 @@ package be.jimsa.restapisconsuming.ws.controller;
 
 import be.jimsa.restapisconsuming.ws.model.request.PersonRequest;
 import be.jimsa.restapisconsuming.ws.proxy.DataProxy;
+import be.jimsa.restapisconsuming.ws.service.RestTemplateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +15,11 @@ import java.util.List;
 public class DataController {
 
     private final DataProxy dataProxy;
+    private final RestTemplateService restTemplateService;
 
-    public DataController(DataProxy dataProxy) {
+    public DataController(DataProxy dataProxy, RestTemplateService restTemplateService) {
         this.dataProxy = dataProxy;
+        this.restTemplateService = restTemplateService;
     }
 
     @GetMapping("/feign")
@@ -25,8 +28,8 @@ public class DataController {
     }
 
     @GetMapping("/template")
-    public String getDataByRestTemplate() {
-        return "getDataByRestTemplate";
+    public ResponseEntity<List<PersonRequest>> getDataByRestTemplate() {
+        return ResponseEntity.ok(restTemplateService.getPeople());
     }
 
     @GetMapping("/client")
